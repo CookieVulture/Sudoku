@@ -30,6 +30,7 @@ def find_zero(screen):
         for column in range(len(screen[0])):
             if screen[row][column] == 0:
                 return row, column
+    return None
 
 
 def isvalid(screen, number, position):
@@ -45,4 +46,36 @@ def isvalid(screen, number, position):
             return False
 
     # Box
-    
+    box_a = position[1] // 3
+    box_b = position[0] // 3
+    for i in range (box_b*3, box_b*3+3):
+        for j in range (box_a*3, box_a*3+3):
+            if screen[i][j] == number and (i, j) != position:
+                return False
+
+    return True
+
+
+def backtracking(screen):
+
+    find = find_zero(screen)
+    if not find:
+        return True
+    else:
+        row, column = find
+
+    for num in range(1,10):
+        if isvalid(screen, num, (row, column)):
+            screen[row][column] = num
+
+            if backtracking(screen):
+                return True
+
+            screen[row][column] = 0
+    return False
+
+
+game_print(game)
+backtracking(game)
+print()
+game_print(game)
